@@ -1,5 +1,5 @@
 # Copyright (C) 2004 MySQL AB
-# Copyright (C) 2004-2018 Alexey Kopytov <akopytov@gmail.com>
+# Copyright (C) 2004-2008 Alexey Kopytov <akopytov@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,16 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-if USE_MYSQL
-MYSQL_DIR = mysql
-endif
+noinst_LIBRARIES = libsbpgsql.a
 
-if USE_PGSQL
-PGSQL_DIR = pgsql
-endif
-
-if USE_HERA
-HERA_DIR = hera
-endif
-
-SUBDIRS = $(MYSQL_DIR) $(PGSQL_DIR) $(HERA_DIR)
+libsbpgsql_a_SOURCES = drv_hera.c
+libsbpgsql_a_CPPFLAGS = -g $(PGSQL_CFLAGS) $(AM_CPPFLAGS)

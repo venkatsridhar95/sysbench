@@ -138,6 +138,18 @@ AS_IF([test "x$with_pgsql" != "xno"],
    [pgsql_support=no])
 AC_MSG_RESULT([$pgsql_support])
 
+# Check if we should compile with HERA support
+AC_ARG_WITH([hera],
+            AS_HELP_STRING([--with-hera],
+                           [compile with Hera support (default is enabled)]),
+            [], [with_hera=yes])
+AC_MSG_CHECKING([whether to compile with Hera support])
+AS_IF([test "x$with_hera" != "xno"],
+   [hera_support=yes],
+   [hera_support=no])
+AC_MSG_RESULT([$hera_support])
+
+
 # Set LuaJIT flags
 SB_LUAJIT
 
@@ -194,6 +206,16 @@ AS_IF([test x$with_pgsql != xno], [
 ])
 AM_CONDITIONAL(USE_PGSQL, test x$with_pgsql != xno)
 AC_SUBST([USE_PGSQL])
+
+AS_IF([test x$with_hera != xno], [
+    AC_CHECK_HERA([$with_hera])
+    USE_HERA=1
+    AC_DEFINE(USE_HERA,1,[Define to 1 if you want to compile with Hera support])
+    AC_SUBST([PGSQL_LIBS])
+    AC_SUBST([PGSQL_CFLAGS])
+])
+AM_CONDITIONAL(USE_HERA, test x$with_hera != xno)
+AC_SUBST([USE_HERA])
 
 # Check for libaio
 AC_CHECK_AIO
@@ -398,6 +420,7 @@ src/Makefile
 src/drivers/Makefile
 src/drivers/mysql/Makefile
 src/drivers/pgsql/Makefile
+src/drivers/hera/Makefile
 src/tests/Makefile
 src/tests/cpu/Makefile
 src/tests/fileio/Makefile
@@ -428,6 +451,7 @@ AC_MSG_RESULT([datadir            : $(eval echo ${datadir})])
 AC_MSG_RESULT([])
 AC_MSG_RESULT([MySQL support      : ${mysql_support}])
 AC_MSG_RESULT([PostgreSQL support : ${pgsql_support}])
+AC_MSG_RESULT([Hera support : ${hera_support}])
 AC_MSG_RESULT([])
 AC_MSG_RESULT([LuaJIT             : ${sb_use_luajit}])
 AC_MSG_RESULT([LUAJIT_CFLAGS      : ${LUAJIT_CFLAGS}])
